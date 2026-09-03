@@ -1,20 +1,33 @@
 """
-Scrapes Premier League player market values from Transfermarkt for a given
+Scrapes Premier League squad market values from Transfermarkt for a given
 range of seasons and saves one CSV per season to data/raw/.
 
+v2 -- rewritten after v1's approach (the global "marktwerte" top-values
+ranking page) turned out to ignore saison_id entirely and return current
+values with heavy duplication and thin coverage (~100 unique names per
+"season", ~2-10% overlap with Understat).
+
+This version scrapes per-club squad ("Kader") pages instead, which do
+respect saison_id and give full squad coverage with no duplicates:
+  1. get_season_clubs()  -- get the 20 club IDs/slugs for a season from
+     the league overview page.
+  2. scrape_club_squad() -- get every player's name, position, age, and
+     market value from one club's squad page for that season.
+
 Usage:
-    python src/scrape_transfermarkt.py
+    python src/scrape_transfermarkt.py           # full run, all seasons
+    python src/scrape_transfermarkt.py --test     # ONE club, ONE season only
 """
 
 from __future__ import annotations
 
-import time
 import re
+import sys
+import time
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-# Transfermarkt blocks requests that don't look like a real browser.
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -23,17 +36,13 @@ HEADERS = {
     )
 }
 
-BASE_URL = "https://www.transfermarkt.com/premier-league/marktwerte/wettbewerb/GB1"
-
-# Transfermarkt's saison_id is the year the season STARTS in.
-# e.g. saison_id=2022 -> 2022/23 season.
 SEASONS = [2019, 2020, 2021, 2022, 2023]
-
-REQUEST_DELAY_SECONDS = 2  # be polite, avoid getting rate-limited/blocked
+REQUEST_DELAY_SECONDS = 2
+LEAGUE_URL = "https://www.transfermarkt.com/premier-league/startseite/wettbewerb/GB1"
+SQUAD_URL_TEMPLATE = "https://www.transfermarkt.com/{slug}/kader/verein/{club_id}/saison_id/{season}"
 
 
 def parse_market_value(value_str: str) -> float | None:
-    """Convert strings like '€45.00m' or '€800k' into a plain float (in euros)."""
     if not value_str:
         return None
     value_str = value_str.replace("€", "").strip()
@@ -49,67 +58,75 @@ def parse_market_value(value_str: str) -> float | None:
     return number
 
 
-def scrape_season(season_id: int, max_pages: int = 20) -> pd.DataFrame:
-    """Scrape all pages of the market value list for one season."""
-    all_players = []
+def get_season_clubs(season: int) -> list[dict]:
+    """Get the club id/slug/name for every club in the league that season."""
+    url = f"{LEAGUE_URL}/plus/?saison_id={season}"
+    response = requests.get(url, headers=HEADERS)
 
-    for page in range(1, max_pages + 1):
-        url = f"{BASE_URL}/plus/?saison_id={season_id}&page={page}"
-        response = requests.get(url, headers=HEADERS)
+    if response.status_code != 200:
+        print(f"  HTTP {response.status_code} fetching club list for {season}.")
+        return []
 
-        if response.status_code != 200:
-            print(f"  Page {page}: HTTP {response.status_code}, stopping.")
-            break
+    soup = BeautifulSoup(response.text, "html.parser")
+    club_links = soup.select("a[href*='/startseite/verein/']")
 
-        soup = BeautifulSoup(response.text, "html.parser")
-        table = soup.find("table", class_="items")
+    clubs = {}
+    for a in club_links:
+        href = a.get("href", "")
+        match = re.search(r"/([\w-]+)/startseite/verein/(\d+)", href)
+        if not match:
+            continue
+        slug, club_id = match.groups()
+        name = a.get("title") or a.text.strip()
+        if name and club_id not in clubs:
+            clubs[club_id] = {"slug": slug, "id": club_id, "name": name}
 
-        if table is None:
-            print(f"  Page {page}: no table found, stopping.")
-            break
+    return list(clubs.values())
 
-        rows = table.find("tbody").find_all("tr", recursive=False)
-        if not rows:
-            print(f"  Page {page}: no rows, assuming last page.")
-            break
 
-        for row in rows:
-            player = extract_player_from_row(row)
-            if player:
-                player["season"] = season_id
-                all_players.append(player)
+def extract_age(row) -> int | None:
+    """
+    On squad ('Kader') pages, age is a plain integer (not a birth-date
+    string with parens like the old marktwerte page used). The first
+    'zentriert' cell is the shirt number, the second is age -- both are
+    bare digits, so we take the second digit-only zentriert cell as age,
+    with a sanity range check to avoid grabbing an unrelated numeric cell.
+    """
+    zentriert_cells = [c.get_text(strip=True) for c in row.select("td.zentriert")]
+    numeric_cells = [t for t in zentriert_cells if t.isdigit()]
 
-        print(f"  Page {page}: {len(rows)} rows scraped.")
-        time.sleep(REQUEST_DELAY_SECONDS)
+    if len(numeric_cells) >= 2:
+        candidate = int(numeric_cells[1])
+    elif len(numeric_cells) == 1:
+        candidate = int(numeric_cells[0])
+    else:
+        return None
 
-    return pd.DataFrame(all_players)
+    return candidate if 14 <= candidate <= 50 else None
 
 
 def extract_player_from_row(row) -> dict | None:
     """
-    NOTE: This selector logic is my best guess at Transfermarkt's current
-    layout, but their HTML structure changes periodically. Treat this
-    function as the first thing to fix if scraping comes back empty --
-    we'll inspect real page HTML together and adjust the selectors.
+    NOTE: same caveat as before -- these selectors are my best guess at
+    the squad page's current layout, based on Transfermarkt's general
+    conventions (posrela cell for name+position, rechts hauptlink for
+    value). Verify with --test before trusting a full run.
     """
     try:
-        name_tag = row.select_one("td.hauptlink a")
+        name_tag = row.select_one("td.posrela .hauptlink a") or row.select_one("td.hauptlink a")
         name = name_tag.text.strip() if name_tag else None
-
-        # Market value is typically in the last table cell.
-        value_tag = row.select_one("td.rechts.hauptlink")
-        market_value = parse_market_value(value_tag.text.strip()) if value_tag else None
-
-        # Position is usually the second row of the inline table in that cell.
-        position_tag = row.select_one("td:nth-of-type(2)")
-        position = position_tag.text.strip() if position_tag else None
-
-        # Age
-        age_tag = row.select_one("td:nth-of-type(3)")
-        age = age_tag.text.strip() if age_tag else None
-
         if not name:
             return None
+
+        # Position is usually the second row of a small inline table
+        # inside the same cell as the player's name/photo.
+        position_tag = row.select_one("td.posrela table.inline-table tr:nth-of-type(2) td")
+        position = position_tag.text.strip() if position_tag else None
+
+        age = extract_age(row)
+
+        value_tag = row.select_one("td.rechts.hauptlink")
+        market_value = parse_market_value(value_tag.get_text(strip=True)) if value_tag else None
 
         return {
             "name": name,
@@ -122,11 +139,65 @@ def extract_player_from_row(row) -> dict | None:
         return None
 
 
+def scrape_club_squad(club: dict, season: int) -> list[dict]:
+    url = SQUAD_URL_TEMPLATE.format(slug=club["slug"], club_id=club["id"], season=season)
+    response = requests.get(url, headers=HEADERS)
+
+    if response.status_code != 200:
+        print(f"    HTTP {response.status_code} for {club['name']} {season}.")
+        return []
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    table = soup.find("table", class_="items")
+    if table is None:
+        print(f"    No squad table found for {club['name']} {season}.")
+        return []
+
+    rows = table.find("tbody").find_all("tr", recursive=False)
+    players = []
+    for row in rows:
+        player = extract_player_from_row(row)
+        if player:
+            player["club"] = club["name"]
+            player["season"] = season
+            players.append(player)
+
+    return players
+
+
+def scrape_season(season: int, club_limit: int | None = None) -> pd.DataFrame:
+    print(f"  Getting club list for {season}...")
+    clubs = get_season_clubs(season)
+    print(f"  Found {len(clubs)} clubs.")
+    time.sleep(REQUEST_DELAY_SECONDS)
+
+    if club_limit:
+        clubs = clubs[:club_limit]
+
+    all_players = []
+    for club in clubs:
+        print(f"  Scraping {club['name']}...")
+        players = scrape_club_squad(club, season)
+        print(f"    {len(players)} players.")
+        all_players.extend(players)
+        time.sleep(REQUEST_DELAY_SECONDS)
+
+    return pd.DataFrame(all_players)
+
+
 def main():
-    for season in SEASONS:
+    test_mode = "--test" in sys.argv
+    seasons = SEASONS[:1] if test_mode else SEASONS
+    club_limit = 1 if test_mode else None
+
+    if test_mode:
+        print("TEST MODE: one club, one season only.\n")
+
+    for season in seasons:
         print(f"Scraping season {season}/{season + 1}...")
-        df = scrape_season(season)
-        out_path = f"data/raw/transfermarkt_{season}.csv"
+        df = scrape_season(season, club_limit=club_limit)
+        suffix = "_TEST" if test_mode else ""
+        out_path = f"data/raw/transfermarkt_{season}{suffix}.csv"
         df.to_csv(out_path, index=False)
         print(f"  Saved {len(df)} players to {out_path}\n")
 
