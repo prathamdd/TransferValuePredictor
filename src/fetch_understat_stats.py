@@ -18,6 +18,8 @@ Usage:
     python src/fetch_understat_stats.py
 """
 
+from __future__ import annotations
+
 import time
 import requests
 import pandas as pd
@@ -63,6 +65,7 @@ def scrape_season(season: int) -> pd.DataFrame:
 
     keep_and_rename = {
         "player_name": "name",
+        "team_title": "club",
         "position": "position_raw",
         "games": "appearances",
         "time": "minutes",

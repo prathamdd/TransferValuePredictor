@@ -45,7 +45,8 @@ SQUAD_URL_TEMPLATE = "https://www.transfermarkt.com/{slug}/kader/verein/{club_id
 def parse_market_value(value_str: str) -> float | None:
     if not value_str:
         return None
-    value_str = value_str.replace("€", "").strip()
+    # Transfermarkt has used both "€45.00m" and "€45.00M" for the suffix.
+    value_str = value_str.replace("€", "").strip().lower()
     match = re.match(r"([\d.]+)([mk]?)", value_str)
     if not match:
         return None
