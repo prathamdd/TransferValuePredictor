@@ -9,3 +9,4 @@ rapidfuzz
 jupyter
 matplotlib
 seaborn
+streamlit

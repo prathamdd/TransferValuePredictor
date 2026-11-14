@@ -19,6 +19,9 @@ Design decisions (each explained where it's implemented):
   - Position is one-hot encoded, with defenders as the reference category.
   - A naive baseline (predict each position's median value) is reported
     alongside the model, so the score has something to be compared against.
+  - v2 adds club strength: the club's league points that season, from
+    fetch_team_points.py. If those files exist, v1 (stats only) and v2 are
+    trained on the same rows and scored side by side; otherwise only v1 runs.
 
 Outputs:
   models/transfer_model.joblib     fitted pipeline (used by predict.py)
@@ -53,8 +56,10 @@ OUTPUT_DIR = Path("outputs")
 TEST_SEASON = 2023
 MIN_MINUTES = 450  # about five full matches
 
-NUMERIC_FEATURES = ["goals", "assists", "minutes", "age", "age_from_25_sq"]
+V1_NUMERIC = ["goals", "assists", "minutes", "age", "age_from_25_sq"]
+V2_NUMERIC = V1_NUMERIC + ["club_points"]
 AGE_CENTER = 25
+TEAM_POINTS_DIR = Path("data/raw")
 CATEGORICAL_FEATURES = ["position_group"]
 TARGET = "market_value_eur"
 
@@ -73,10 +78,39 @@ def load_data() -> pd.DataFrame:
     df = pd.read_csv(MERGED_PATH)
     before = len(df)
     df = df[df["minutes"] >= MIN_MINUTES]
-    df = df.dropna(subset=NUMERIC_FEATURES[:-1] + CATEGORICAL_FEATURES + [TARGET])
+    df = df.dropna(subset=["goals", "assists", "minutes", "age"] + CATEGORICAL_FEATURES + [TARGET])
     df = df[df[TARGET] > 0].copy()
     print(f"Loaded {before} rows, kept {len(df)} with {MIN_MINUTES}+ minutes and complete data.")
-    return add_features(df)
+    df = add_features(df)
+    if "club_points" in df.columns:
+        missing = df["club_points"].isna()
+        if missing.any():
+            print(f"Dropped {missing.sum()} rows with no club points "
+                  f"(clubs: {sorted(df.loc[missing, 'club_tm'].dropna().unique())[:5]}).")
+            df = df[~missing]
+    return df
+
+
+def load_team_points() -> dict[tuple[int, str], float] | None:
+    """(season, Transfermarkt club name) -> league points, or None if
+    fetch_team_points.py hasn't been run."""
+    files = sorted(TEAM_POINTS_DIR.glob("team_points_*.csv"))
+    if not files:
+        return None
+    tp = pd.concat([pd.read_csv(f) for f in files])
+    return {(int(r.season), r.club_tm): float(r.points) for r in tp.itertuples()}
+
+
+def club_points_for(season: int, clubs) -> float:
+    """Mid-season transfers have club_tm like 'Chelsea FC,Manchester City';
+    they get the average of their clubs' points."""
+    points = _TEAM_POINTS or {}
+    values = [points.get((int(season), c)) for c in str(clubs).split(",")]
+    values = [v for v in values if v is not None]
+    return float(np.mean(values)) if values else np.nan
+
+
+_TEAM_POINTS = load_team_points()
 
 
 def add_features(df: pd.DataFrame) -> pd.DataFrame:
@@ -84,15 +118,18 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     always compute them the same way."""
     df = df.copy()
     df["age_from_25_sq"] = (df["age"] - AGE_CENTER) ** 2
+    if (_TEAM_POINTS is not None and "club_points" not in df.columns
+            and {"season", "club_tm"} <= set(df.columns)):
+        df["club_points"] = [club_points_for(s, c) for s, c in zip(df["season"], df["club_tm"])]
     return df
 
 
-def build_pipeline() -> Pipeline:
+def build_pipeline(numeric_features: list[str]) -> Pipeline:
     # Scaling the numeric features doesn't change a linear model's
     # predictions, but it puts the coefficients on a comparable scale, so
     # they can be ranked by how much each feature matters.
     preprocess = ColumnTransformer([
-        ("num", StandardScaler(), NUMERIC_FEATURES),
+        ("num", StandardScaler(), numeric_features),
         # Categories listed explicitly so drop="first" removes defenders
         # (the largest group), which becomes the reference the other
         # positions are compared to.
@@ -126,7 +163,7 @@ def print_coefficients(pipeline: Pipeline) -> None:
     print("  age_from_25_sq is the curve: negative means value falls off on both sides of 25.")
 
 
-def plot_predicted_vs_actual(test: pd.DataFrame, r2: float, path: Path) -> None:
+def plot_predicted_vs_actual(test: pd.DataFrame, r2: float, label: str, path: Path) -> None:
     fig, ax = plt.subplots(figsize=(8, 7), dpi=150)
     actual = test[TARGET] / 1e6
     predicted = test["predicted_eur"] / 1e6
@@ -163,7 +200,7 @@ def plot_predicted_vs_actual(test: pd.DataFrame, r2: float, path: Path) -> None:
     ax.set_xlabel("Actual market value (log scale)", color="#3d3d3a")
     ax.set_ylabel("Predicted market value (log scale)", color="#3d3d3a")
     ax.set_title(f"Predicted vs actual market value, {TEST_SEASON}/{str(TEST_SEASON + 1)[2:]} season"
-                 f"\nTrained on 2019–{TEST_SEASON - 1} · R² = {r2:.2f} (log scale)",
+                 f"\n{label} · trained on 2019–{TEST_SEASON - 1} · R² = {r2:.2f} (log scale)",
                  loc="left", fontsize=12, color="#1a1a19")
     ax.grid(True, which="major", color="#e8e8e4", linewidth=0.8)
     ax.set_axisbelow(True)
@@ -188,24 +225,35 @@ def main():
     test = df[df["season"] == TEST_SEASON].copy()
     print(f"Train: {len(train)} rows (2019–{TEST_SEASON - 1}). Test: {len(test)} rows ({TEST_SEASON}).")
 
-    features = NUMERIC_FEATURES + CATEGORICAL_FEATURES
-    pipeline = build_pipeline()
-    pipeline.fit(train[features], np.log(train[TARGET]))
-
-    # Predictions come out in log space; exp() converts back to euros.
-    test["predicted_eur"] = np.exp(pipeline.predict(test[features]))
+    versions = [("v1: stats only", V1_NUMERIC)]
+    if "club_points" in df.columns:
+        versions.append(("v2: + club points", V2_NUMERIC))
+    else:
+        print("No team_points_*.csv found, so only v1 runs. "
+              "Run src/fetch_team_points.py to add club strength.")
 
     # Baseline: every player is worth his position's median training value.
     position_medians = train.groupby("position_group")[TARGET].median()
     test["baseline_eur"] = test["position_group"].map(position_medians)
+    results = [evaluate("Baseline (position median)", test[TARGET].values, test["baseline_eur"].values)]
 
-    results = pd.DataFrame([
-        evaluate("Baseline (position median)", test[TARGET].values, test["baseline_eur"].values),
-        evaluate("Linear regression", test[TARGET].values, test["predicted_eur"].values),
-    ])
+    # Every version is trained and scored on exactly the same rows.
+    for label, numeric in versions:
+        features = numeric + CATEGORICAL_FEATURES
+        pipeline = build_pipeline(numeric).fit(train[features], np.log(train[TARGET]))
+        # Predictions come out in log space; exp() converts back to euros.
+        test["predicted_eur"] = np.exp(pipeline.predict(test[features]))
+        results.append(evaluate(label, test[TARGET].values, test["predicted_eur"].values))
+
+    # The last version is the one reported, plotted and saved.
+    label, numeric = versions[-1]
+    features = numeric + CATEGORICAL_FEATURES
+
+    results = pd.DataFrame(results)
     print(f"\nTest-season results ({TEST_SEASON}):")
     print(results.to_string(index=False, float_format=lambda x: f"{x:.2f}"))
 
+    print(f"\n{label}")
     print_coefficients(pipeline)
 
     test["ratio"] = test["predicted_eur"] / test[TARGET]
@@ -214,18 +262,18 @@ def main():
     test[cols].sort_values("ratio").to_csv(OUTPUT_DIR / f"predictions_{TEST_SEASON}.csv", index=False)
 
     show = test.assign(actual_m=test[TARGET] / 1e6, predicted_m=test["predicted_eur"] / 1e6)
-    show_cols = ["name", "position_group", "age", "goals", "assists", "actual_m", "predicted_m"]
+    show_cols = ["name", "club_tm", "age", "goals", "assists", "actual_m", "predicted_m"]
     print("\nMost overvalued by the market (model predicts far less than actual):")
     print(show.nsmallest(5, "ratio")[show_cols].to_string(index=False, float_format=lambda x: f"{x:.1f}"))
     print("\nMost undervalued by the market (model predicts far more than actual):")
     print(show.nlargest(5, "ratio")[show_cols].to_string(index=False, float_format=lambda x: f"{x:.1f}"))
 
-    r2 = results.loc[results["model"] == "Linear regression", "R² (log scale)"].iloc[0]
-    plot_predicted_vs_actual(test, r2, OUTPUT_DIR / "predicted_vs_actual.png")
+    r2 = results.loc[results["model"] == label, "R² (log scale)"].iloc[0]
+    plot_predicted_vs_actual(test, r2, label, OUTPUT_DIR / "predicted_vs_actual.png")
 
     # Refit on all seasons for predict.py, so the deployed model uses every row.
     # The scores above come from the train-only fit and stay honest.
-    final = build_pipeline().fit(df[features], np.log(df[TARGET]))
+    final = build_pipeline(numeric).fit(df[features], np.log(df[TARGET]))
     joblib.dump({"pipeline": final, "features": features, "min_minutes": MIN_MINUTES},
                 MODEL_DIR / "transfer_model.joblib")
 

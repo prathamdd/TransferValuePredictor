@@ -1,0 +1,123 @@
+season,name,tm_name,club_understat,club_tm,position_understat,position_tm,position_group,age,appearances,minutes,goals,assists,market_value_eur,match_type,match_score
+2019,Mat Ryan,Mathew Ryan,,Brighton & Hove Albion,GK,Goalkeeper,G,28.0,38.0,3420,0.0,0.0,8000000.0,review,84.2
+2019,Kepa,Kepa Arrizabalaga,,Chelsea FC,GK,Goalkeeper,G,25.0,33.0,2970,0.0,0.0,32000000.0,review,90.0
+2019,Jonny,Jonny Otto,,Wolverhampton Wanderers,D M S,Right-Back,D,26.0,35.0,2907,2.0,2.0,16000000.0,review,90.0
+2019,Oliver McBurnie,Oli McBurnie,,Sheffield United,F S,Centre-Forward,F,24.0,36.0,2123,6.0,0.0,8000000.0,review,88.9
+2019,Ezri Konsa Ngoyo,Ezri Konsa,,Aston Villa,D S,Centre-Back,D,22.0,25.0,2054,1.0,2.0,6500000.0,review,90.0
+2019,Joseph Gomez,Joe Gomez,,Liverpool FC,D S,Centre-Back,D,23.0,28.0,1996,0.0,0.0,33500000.0,review,85.7
+2019,Wesley,Wesley Moraes,,Aston Villa,F,Centre-Forward,F,23.0,21.0,1806,5.0,1.0,24000000.0,review,90.0
+2019,Sokratis,Sokratis Papastathopoulos,,Arsenal FC,D,Centre-Back,D,32.0,19.0,1698,2.0,0.0,14500000.0,review,90.0
+2019,José Holebas,Jose Cholevas,,Watford FC,D S,Left-Back,D,36.0,14.0,1019,0.0,0.0,1200000.0,review,88.0
+2019,Tanguy NDombele Alvaro,Tanguy Ndombélé,,Tottenham Hotspur,M S,Central Midfield,M,23.0,21.0,1002,2.0,2.0,52000000.0,review,90.0
+2019,Roberto Jiménez,Roberto,,West Ham United,GK S,Goalkeeper,G,34.0,8.0,687,0.0,0.0,800000.0,review,90.0
+2019,Arnaut Danjuma Groeneveld,Arnaut Danjuma,,AFC Bournemouth,M S,Left Winger,F,23.0,14.0,614,0.0,0.0,9500000.0,review,90.0
+2019,Matthew Longstaff,Matty Longstaff,,Newcastle United,M S,Central Midfield,M,20.0,9.0,564,2.0,0.0,3600000.0,review,87.5
+2019,Daniel Drinkwater,Danny Drinkwater,,"Aston Villa,Burnley FC",M,Central Midfield,M,30.0,5.0,331,0.0,0.0,4800000.0,review,84.8
+2019,Jota,Jota Peleteiro,,Aston Villa,F M S,Right Winger,F,29.0,10.0,328,0.0,1.0,3500000.0,review,90.0
+2019,Faustino Anjorin,Tino Anjorin,,Chelsea FC,S,Central Midfield,M,18.0,1.0,19,0.0,0.0,2300000.0,review,85.7
+2019,Matthew James,Matty James,,Leicester City,S,Central Midfield,M,28.0,1.0,3,0.0,0.0,1200000.0,review,83.3
+2020,Ezri Konsa Ngoyo,Ezri Konsa,,Aston Villa,D S,Centre-Back,D,23.0,36.0,3192,2.0,0.0,25000000.0,review,90.0
+2020,Bobby Reid,Bobby De Cordova-Reid,,Fulham FC,D F M S,Attacking Midfield,M,28.0,33.0,2394,5.0,2.0,10000000.0,review,90.0
+2020,Matthew Cash,Matty Cash,,Aston Villa,D,Right-Back,D,23.0,28.0,2389,0.0,2.0,22000000.0,review,81.8
+2020,Tanguy NDombele Alvaro,Tanguy Ndombélé,,Tottenham Hotspur,M S,Central Midfield,M,24.0,33.0,2141,3.0,2.0,50000000.0,review,90.0
+2020,Nathaniel Phillips,Nat Phillips,,Liverpool FC,D S,Centre-Back,D,24.0,17.0,1451,1.0,1.0,8000000.0,review,80.0
+2020,Oliver McBurnie,Oli McBurnie,,Sheffield United,F S,Centre-Forward,F,25.0,23.0,1306,1.0,0.0,10000000.0,review,88.9
+2020,Mat Ryan,Mathew Ryan,,"Arsenal FC,Brighton & Hove Albion",GK,Goalkeeper,G,29.0,14.0,1260,0.0,0.0,6000000.0,review,84.2
+2020,Fernando Marçal,Marçal,,Wolverhampton Wanderers,D M S,Left-Back,D,32.0,13.0,611,0.0,0.0,1800000.0,review,90.0
+2020,Joseph Gomez,Joe Gomez,,Liverpool FC,D S,Centre-Back,D,24.0,7.0,594,0.0,0.0,30000000.0,review,85.7
+2020,Kepa,Kepa Arrizabalaga,,Chelsea FC,GK S,Goalkeeper,G,26.0,7.0,582,0.0,0.0,13000000.0,review,90.0
+2020,Jonny,Jonny Otto,,Wolverhampton Wanderers,D,Right-Back,D,27.0,7.0,505,0.0,0.0,15000000.0,review,90.0
+2020,Matthew Longstaff,Matty Longstaff,,Newcastle United,M S,Central Midfield,M,21.0,5.0,376,0.0,0.0,5000000.0,review,87.5
+2020,Ian Poveda-Ocampo,Ian Poveda,,Leeds United,S,Right Winger,F,21.0,14.0,322,0.0,0.0,1500000.0,review,90.0
+2020,William Smallbone,Will Smallbone,,Southampton FC,M S,Central Midfield,M,21.0,3.0,174,0.0,0.0,2000000.0,review,90.3
+2020,Amad Diallo Traore,Amad Diallo,,Manchester United,M S,Right Winger,F,18.0,3.0,172,0.0,1.0,18000000.0,review,90.0
+2020,Daniel N&#039;Lundulu,Dan Nlundulu,,Southampton FC,S,Centre-Forward,F,22.0,13.0,82,0.0,0.0,1500000.0,review,78.6
+2020,Wesley,Wesley Moraes,,Aston Villa,S,Centre-Forward,F,24.0,3.0,14,0.0,0.0,13000000.0,review,90.0
+2020,Hannibal Mejbri,Hannibal,,Manchester United,S,Attacking Midfield,M,18.0,1.0,3,0.0,0.0,3000000.0,review,90.0
+2020,Jaden Philogene-Bidace,Jaden Philogene,,Aston Villa,S,Left Winger,F,19.0,1.0,1,0.0,0.0,500000.0,review,90.0
+2020,William Fish,Will Fish,,Manchester United,S,Centre-Back,D,18.0,1.0,1,0.0,0.0,500000.0,review,85.7
+2021,Emerson,Emerson,,Chelsea FC,D S,Left-Back,D,27.0,31.0,2296,1.0,1.0,14000000.0,ambiguous,100.0
+2021,Emerson,Emerson Royal,,Tottenham Hotspur,S,Right-Back,D,23.0,1.0,3,0.0,0.0,25000000.0,ambiguous,90.0
+2021,Matthew Cash,Matty Cash,,Aston Villa,D M,Right-Back,D,24.0,38.0,3386,4.0,3.0,25000000.0,review,81.8
+2021,Ezri Konsa Ngoyo,Ezri Konsa,,Aston Villa,D,Centre-Back,D,24.0,29.0,2494,2.0,0.0,22000000.0,review,90.0
+2021,Valentino Livramento,Tino Livramento,,Southampton FC,D S,Right-Back,D,19.0,28.0,2202,1.0,1.0,25000000.0,review,85.7
+2021,Samir,Samir Caetano,,Watford FC,D,Centre-Back,D,27.0,19.0,1682,0.0,0.0,5000000.0,review,90.0
+2021,Fernando Marçal,Marçal,,Wolverhampton Wanderers,D S,Left-Back,D,33.0,18.0,1468,0.0,0.0,1500000.0,review,90.0
+2021,Trincão,Francisco Trincão,,Wolverhampton Wanderers,F M S,Right Winger,F,22.0,28.0,1359,2.0,1.0,20000000.0,review,90.0
+2021,Jonny,Jonny Otto,,Wolverhampton Wanderers,D S,Right-Back,D,28.0,13.0,1020,2.0,0.0,15000000.0,review,90.0
+2021,Jacob Sørensen,Jacob Lungi Sørensen,,Norwich City,D M S,Defensive Midfield,M,24.0,10.0,595,0.0,0.0,1500000.0,review,90.0
+2021,Tanguy NDombele Alvaro,Tanguy Ndombélé,,Tottenham Hotspur,M S,Central Midfield,M,25.0,9.0,490,1.0,1.0,30000000.0,review,90.0
+2021,Kepa,Kepa Arrizabalaga,,Chelsea FC,GK,Goalkeeper,G,27.0,4.0,360,0.0,0.0,10000000.0,review,90.0
+2021,Joseph Gomez,Joe Gomez,,Liverpool FC,D S,Centre-Back,D,25.0,8.0,333,0.0,1.0,18000000.0,review,85.7
+2021,Leo Fuhr Hjelde,Leo Hjelde,,Leeds United,S,Centre-Back,D,18.0,2.0,150,0.0,0.0,800000.0,review,90.0
+2021,William Smallbone,Will Smallbone,,Southampton FC,F M S,Central Midfield,M,22.0,4.0,136,0.0,0.0,2000000.0,review,90.3
+2021,Bryan Gil Salvatierra,Bryan Gil,,Tottenham Hotspur,S,Left Winger,F,21.0,9.0,76,0.0,0.0,18000000.0,review,90.0
+2021,Hannibal Mejbri,Hannibal,,Manchester United,M S,Attacking Midfield,M,19.0,2.0,68,0.0,0.0,6000000.0,review,90.0
+2021,Tariqe Fosu-Henry,Tariqe Fosu,,Brentford FC,S,Left Winger,F,26.0,1.0,15,0.0,0.0,2000000.0,review,90.0
+2021,Finley Stevens,Fin Stevens,,Brentford FC,S,Right-Back,D,19.0,1.0,11,0.0,0.0,400000.0,review,88.0
+2021,Wesley,Wesley Moraes,,Aston Villa,S,Centre-Forward,F,25.0,1.0,1,0.0,0.0,6000000.0,review,90.0
+2021,Jaden Philogene-Bidace,Jaden Philogene,,Aston Villa,S,Left Winger,F,20.0,1.0,1,0.0,0.0,3000000.0,review,90.0
+2021,Daniel Chesters,Dan Chesters,,West Ham United,S,Right Midfield,M,20.0,1.0,1,0.0,0.0,250000.0,review,88.9
+2021,Mason Greenwood,,,,,,,,,1305,,,,unmatched,
+2022,Emerson,Emerson,,West Ham United,D S,Left-Back,D,28.0,26.0,1733,2.0,1.0,12000000.0,ambiguous,100.0
+2022,Emerson,Emerson Royal,,Tottenham Hotspur,D M S,Right-Back,D,24.0,22.0,1331,1.0,0.0,20000000.0,ambiguous,90.0
+2022,Ezri Konsa Ngoyo,Ezri Konsa,,Aston Villa,D S,Centre-Back,D,25.0,38.0,3325,0.0,0.0,25000000.0,review,90.0
+2022,Cheick Oumar Doucoure,Cheick Doucouré,,Crystal Palace,M,Defensive Midfield,M,23.0,34.0,2825,0.0,3.0,35000000.0,review,90.0
+2022,Estupiñán,Pervis Estupiñán,,Brighton & Hove Albion,D S,Left-Back,D,25.0,35.0,2707,1.0,5.0,32000000.0,review,90.0
+2022,Kepa,Kepa Arrizabalaga,,Chelsea FC,GK,Goalkeeper,G,28.0,29.0,2567,0.0,0.0,18000000.0,review,90.0
+2022,Bobby Reid,Bobby De Cordova-Reid,,Fulham FC,D F M S,Attacking Midfield,M,30.0,36.0,2511,4.0,1.0,7000000.0,review,90.0
+2022,Rasmus Kristensen,Rasmus Nissen Kristensen,,Leeds United,D M S,Right-Back,D,25.0,26.0,1964,3.0,1.0,13000000.0,review,90.0
+2022,Matthew Cash,Matty Cash,,Aston Villa,D M S,Right-Back,D,25.0,26.0,1822,0.0,1.0,25000000.0,review,81.8
+2022,Naif Aguerd,Nayef Aguerd,,West Ham United,D S,Centre-Back,D,27.0,18.0,1600,2.0,0.0,35000000.0,review,87.0
+2022,Joseph Gomez,Joe Gomez,,Liverpool FC,D S,Centre-Back,D,26.0,21.0,1443,0.0,0.0,22000000.0,review,85.7
+2022,Jonny,Jonny Otto,,Wolverhampton Wanderers,D S,Right-Back,D,29.0,18.0,1257,1.0,0.0,13000000.0,review,90.0
+2022,Joe Ayodele-Aribo,Joe Aribo,,Southampton FC,F M S,Central Midfield,M,26.0,21.0,1224,2.0,0.0,11000000.0,review,90.0
+2022,Carlos Alcaraz,Charly Alcaraz,,Southampton FC,F M S,Central Midfield,M,20.0,18.0,1050,4.0,2.0,15000000.0,review,85.7
+2022,Benoit Badiashile Mukinayi,Benoît Badiashile,,Chelsea FC,D S,Centre-Back,D,22.0,11.0,901,1.0,0.0,40000000.0,review,90.0
+2022,Hamed Junior Traore,Hamed Traoré,,AFC Bournemouth,M S,Central Midfield,M,23.0,7.0,435,0.0,0.0,22000000.0,review,90.0
+2022,Illia Zabarnyi,Ilya Zabarnyi,,AFC Bournemouth,D S,Centre-Back,D,20.0,5.0,290,0.0,0.0,20000000.0,review,88.9
+2022,Stefan Ortega Moreno,Stefan Ortega,,Manchester City,GK,Goalkeeper,G,30.0,3.0,270,0.0,0.0,9000000.0,review,90.0
+2022,Pape Sarr,Pape Matar Sarr,,Tottenham Hotspur,M S,Central Midfield,M,20.0,11.0,200,0.0,1.0,15000000.0,review,90.0
+2022,Joseph Whitworth,Joe Whitworth,,Crystal Palace,GK,Goalkeeper,G,19.0,2.0,180,0.0,0.0,900000.0,review,89.7
+2022,Daniel Bentley,Dan Bentley,,Wolverhampton Wanderers,GK,Goalkeeper,G,29.0,2.0,180,0.0,0.0,2000000.0,review,88.0
+2022,Joseph Hodge,Joe Hodge,,Wolverhampton Wanderers,M S,Defensive Midfield,M,20.0,6.0,162,0.0,0.0,2000000.0,review,85.7
+2022,Arnaut Danjuma Groeneveld,Arnaut Danjuma,,Tottenham Hotspur,M S,Left Winger,F,26.0,9.0,151,1.0,0.0,25000000.0,review,90.0
+2022,Bryan Gil Salvatierra,Bryan Gil,,Tottenham Hotspur,F M S,Left Winger,F,22.0,4.0,148,0.0,1.0,15000000.0,review,90.0
+2022,Nathaniel Phillips,Nat Phillips,,Liverpool FC,D S,Centre-Back,D,26.0,2.0,67,0.0,0.0,4000000.0,review,80.0
+2022,Valentino Livramento,Tino Livramento,,Southampton FC,S,Right-Back,D,20.0,2.0,19,0.0,0.0,25000000.0,review,85.7
+2022,Dominic Ballard,Dom Ballard,,Southampton FC,S,Centre-Forward,F,18.0,2.0,17,0.0,0.0,300000.0,review,84.6
+2022,Thomas Cannon,Tom Cannon,,Everton FC,S,Centre-Forward,F,20.0,2.0,15,0.0,0.0,5000000.0,review,87.0
+2023,Emerson,Emerson,,West Ham United,D S,Left-Back,D,29.0,36.0,3163,1.0,2.0,12000000.0,ambiguous,100.0
+2023,Emerson,Emerson Royal,,Tottenham Hotspur,D S,Right-Back,D,25.0,22.0,1145,1.0,0.0,18000000.0,ambiguous,90.0
+2023,Illia Zabarnyi,Ilya Zabarnyi,,AFC Bournemouth,D,Centre-Back,D,21.0,37.0,3330,1.0,0.0,32000000.0,review,88.9
+2023,Ezri Konsa Ngoyo,Ezri Konsa,,Aston Villa,D,Centre-Back,D,26.0,35.0,3090,1.0,0.0,35000000.0,review,90.0
+2023,Vinicius Souza,Vini Souza,,Sheffield United,D M S,Defensive Midfield,M,25.0,36.0,2676,1.0,0.0,12000000.0,review,83.3
+2023,Iyenoma Destiny Udogie,Destiny Udogie,,Tottenham Hotspur,D,Left-Back,D,21.0,28.0,2437,2.0,3.0,45000000.0,review,90.0
+2023,Matthew Cash,Matty Cash,,Aston Villa,D M S,Right-Back,D,26.0,29.0,2142,2.0,2.0,28000000.0,review,81.8
+2023,Pape Sarr,Pape Matar Sarr,,Tottenham Hotspur,M S,Central Midfield,M,21.0,34.0,2141,3.0,3.0,45000000.0,review,90.0
+2023,Naif Aguerd,Nayef Aguerd,,West Ham United,D,Centre-Back,D,28.0,21.0,1871,1.0,0.0,35000000.0,review,87.0
+2023,Joseph Gomez,Joe Gomez,,Liverpool FC,D M S,Centre-Back,D,27.0,32.0,1749,0.0,1.0,28000000.0,review,85.7
+2023,Bobby Reid,Bobby De Cordova-Reid,,Fulham FC,F M S,Attacking Midfield,M,31.0,33.0,1431,6.0,2.0,5000000.0,review,90.0
+2023,Benoit Badiashile Mukinayi,Benoît Badiashile,,Chelsea FC,D S,Centre-Back,D,23.0,18.0,1338,0.0,1.0,30000000.0,review,90.0
+2023,Oliver McBurnie,Oli McBurnie,,Sheffield United,F S,Centre-Forward,F,28.0,21.0,1290,6.0,3.0,4500000.0,review,88.9
+2023,Valentino Livramento,Tino Livramento,,Newcastle United,D S,Right-Back,D,21.0,26.0,1275,1.0,0.0,35000000.0,review,85.7
+2023,Estupiñán,Pervis Estupiñán,,Brighton & Hove Albion,D S,Left-Back,D,26.0,19.0,1239,2.0,3.0,30000000.0,review,90.0
+2023,Cheick Oumar Doucoure,Cheick Doucouré,,Crystal Palace,M,Defensive Midfield,M,24.0,11.0,926,0.0,0.0,35000000.0,review,90.0
+2023,Stefan Ortega Moreno,Stefan Ortega,,Manchester City,GK S,Goalkeeper,G,31.0,9.0,626,0.0,0.0,9000000.0,review,90.0
+2023,Arnaut Danjuma Groeneveld,Arnaut Danjuma,,Everton FC,F M S,Left Winger,F,27.0,14.0,572,1.0,0.0,13000000.0,review,90.0
+2023,Ryan John Giles,Ryan Giles,,Luton Town,D S,Left-Back,D,24.0,11.0,492,0.0,0.0,4500000.0,review,90.0
+2023,Anssumane Fati,Ansu Fati,,Brighton & Hove Albion,F M S,Left Winger,F,21.0,19.0,456,2.0,0.0,25000000.0,review,78.3
+2023,Daniel Bentley,Dan Bentley,,Wolverhampton Wanderers,GK S,Goalkeeper,G,30.0,5.0,379,0.0,0.0,2000000.0,review,88.0
+2023,Amad Diallo Traore,Amad Diallo,,Manchester United,M S,Right Winger,F,21.0,9.0,375,1.0,1.0,18000000.0,review,90.0
+2023,Bryan Gil Salvatierra,Bryan Gil,,Tottenham Hotspur,M S,Left Winger,F,23.0,11.0,182,0.0,0.0,14000000.0,review,90.0
+2023,Hannibal Mejbri,Hannibal,,Manchester United,M S,Attacking Midfield,M,21.0,5.0,124,1.0,0.0,9000000.0,review,90.0
+2023,Joseph Johnson,Joe Johnson,,Luton Town,S,Left-Back,D,18.0,2.0,75,0.0,0.0,100000.0,review,79.2
+2023,Fode Toure,Fodé Ballo-Touré,,Fulham FC,S,Left-Back,D,27.0,6.0,41,0.0,0.0,3000000.0,review,90.0
+2023,Hamed Junior Traore,Hamed Traoré,,AFC Bournemouth,S,Central Midfield,M,24.0,3.0,32,0.0,0.0,17000000.0,review,90.0
+2023,Benicio Baker-Boaitey,Benicio Baker,,Brighton & Hove Albion,S,Right Winger,F,20.0,5.0,22,0.0,0.0,400000.0,review,90.0
+2023,Ben Doak,Ben Gannon-Doak,,Liverpool FC,S,Right Winger,F,18.0,1.0,6,0.0,0.0,10000000.0,review,90.0
+2023,Kaine Hayden,Kaine Kesler-Hayden,,Aston Villa,S,Right-Back,D,21.0,3.0,3,0.0,0.0,2200000.0,review,90.0
+2023,Jonny,Jonny Otto,,Wolverhampton Wanderers,S,Right-Back,D,30.0,1.0,1,0.0,0.0,5000000.0,review,90.0
+2023,Jaden Philogene-Bidace,Jaden Philogene,,Aston Villa,S,Left Winger,F,22.0,1.0,1,0.0,0.0,15000000.0,review,90.0
+2023,Thomas Cannon,Tom Cannon,,Everton FC,S,Centre-Forward,F,21.0,1.0,1,0.0,0.0,4000000.0,review,87.0
+2023,Daniel Gore,Dan Gore,,Manchester United,S,Central Midfield,M,19.0,1.0,1,0.0,0.0,900000.0,review,84.2

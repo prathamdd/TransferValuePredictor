@@ -34,6 +34,7 @@ from train_model import POSITION_NAMES, add_features
 
 MODEL_PATH = Path("models/transfer_model.joblib")
 MERGED_PATH = Path("data/processed/merged.csv")
+DEFAULT_CLUB_POINTS = 55  # a typical mid-table club
 
 
 def fmt_eur(value: float) -> str:
@@ -100,7 +101,12 @@ def find_player(df: pd.DataFrame, query: str) -> str | None:
             best = max([best] + [fuzz.ratio(q, w) for w in norm_name.split()])
         return best
 
-    scores = {n: score(normalize_name(n)) for n in pairs["tm_name"].unique()}
+    # A name with fewer words than the query is a different, shorter name
+    # ('Emerson' is not 'Emerson Royal'), so it can't be a fuzzy match.
+    scores = {
+        n: score(normalize_name(n)) for n in pairs["tm_name"].unique()
+        if len(normalize_name(n).split()) >= len(q_words)
+    }
     top = max(scores.values(), default=0)
     if top < 80:
         return None
@@ -156,13 +162,18 @@ def lookup_mode(bundle: dict, query: str, season: int | None) -> None:
 
 
 def custom_mode(bundle: dict, args: argparse.Namespace) -> None:
+    club_points = args.club_points if args.club_points is not None else DEFAULT_CLUB_POINTS
     row = pd.DataFrame([{
         "goals": args.goals, "assists": args.assists, "minutes": args.minutes,
-        "age": args.age, "position_group": args.position,
+        "age": args.age, "position_group": args.position, "club_points": club_points,
     }])
     value = predict_value(bundle, row)[0]
     print(f"\nA {args.age}-year-old {POSITION_NAMES[args.position].lower()} with "
           f"{args.goals} goals and {args.assists} assists in {args.minutes} minutes:")
+    if "club_points" in bundle["features"]:
+        source = "" if args.club_points is not None else (
+            " (assumed: a typical mid-table club. Set it with --club-points)")
+        print(f"  Club's league points: {club_points}{source}")
     print(f"  Model's market value: {fmt_eur(value)}")
     if args.minutes < bundle["min_minutes"]:
         print(f"  (Under {bundle['min_minutes']} minutes is outside what the model "
@@ -178,6 +189,8 @@ def main():
     parser.add_argument("--minutes", type=int)
     parser.add_argument("--age", type=int)
     parser.add_argument("--position", choices=list(POSITION_NAMES), type=str.upper)
+    parser.add_argument("--club-points", type=int,
+                        help="club's league points (~90 title winner, ~60 mid-table, ~30 relegated)")
     args = parser.parse_args()
 
     if not MODEL_PATH.exists():

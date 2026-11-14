@@ -1,21 +1,16 @@
-# Data (keep directory structure via .gitkeep)
-data/raw/*
-!data/raw/.gitkeep
-data/processed/*
-!data/processed/.gitkeep
-
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
 .venv/
-venv/
-.env
-
-# Jupyter
-.ipynb_checkpoints/
-
-# OS / IDE
+__pycache__/
+*.pyc
 .DS_Store
-.idea/
-.vscode/
+
+# Saved models are rebuilt by train_model.py; the app retrains on startup.
+models/
+
+# Raw scrapes are rebuilt by the src/ scripts. The app only needs the
+# league tables, so those are kept.
+data/raw/*
+!data/raw/team_points_*.csv
+
+# Generated outputs, except the chart shown in the README and the app.
+outputs/*
+!outputs/predicted_vs_actual.png
