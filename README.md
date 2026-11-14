@@ -2,7 +2,7 @@
 
 Search any Premier League player from 2019/20 to 2023/24 and see what a model thinks they're worth next to their real market value, or enter your own stats to see what you'd be worth.
 
-**[Try the app →](https://YOUR-APP.streamlit.app)**
+**[Try the app →]([https://YOUR-APP.streamlit.app](https://transfervaluepredictor.streamlit.app/ ))**
 
 The model is a linear regression on six inputs: goals, assists, minutes, age, position and club strength. It was trained on four seasons and tested on a fifth it never saw. On that unseen season it explains **78%** of the variation in (log) market value, against 5% for a naive baseline.
 
